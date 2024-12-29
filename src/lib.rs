@@ -77,10 +77,6 @@ impl Graph {
     }
 
     fn get_edge(&self, from: usize, to: usize) -> Option<&Edge> {
-        if from >= self.num_of_nodes() || to >= self.num_of_nodes() {
-            panic!("invalid edge id");
-        }
-
         self.nodes[from].get_edge(to)
     }
 
@@ -93,5 +89,19 @@ impl Graph {
             .iter()
             .flat_map(|node| node.get_edge_list())
             .collect()
+    }
+
+    fn insert_edge(&mut self, from: usize, to: usize, weight: usize) {
+        self.nodes[from].add_edge(to, weight);
+        if self.undirected {
+            self.nodes[to].add_edge(from, weight);
+        }
+    }
+
+    fn remove_edge(&mut self, from: usize, to: usize) {
+        self.nodes[from].remove_edge(to);
+        if self.undirected {
+            self.nodes[to].remove_edge(from);
+        }
     }
 }
