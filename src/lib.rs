@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[derive(Clone)]
 /// Represents a graph edge
 struct Edge {
     from: usize,
@@ -14,6 +15,7 @@ impl Edge {
 }
 
 /// Represents a graph node
+#[derive(Clone)]
 struct Node {
     index: usize,
     edges: HashMap<usize, Edge>,
@@ -58,6 +60,7 @@ impl Node {
     }
 }
 
+#[derive(Clone)]
 /// Represents the full Graph structure
 struct Graph {
     nodes: Vec<Node>,
@@ -103,5 +106,30 @@ impl Graph {
         if self.undirected {
             self.nodes[to].remove_edge(from);
         }
+    }
+
+    fn insert_node(&mut self) -> &Node {
+        let new_node = Node::new(self.num_of_nodes());
+        self.nodes.push(new_node);
+        &self.nodes[self.num_of_nodes() - 1]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn directed_graph() -> Graph {
+        let mut g = Graph::new(5, false);
+        g.insert_edge(0, 1, 1);
+        g.insert_edge(0, 3, 1);
+        g.insert_edge(0, 4, 3);
+        g.insert_edge(1, 2, 2);
+        g.insert_edge(1, 4, 1);
+        g.insert_edge(3, 4, 3);
+        g.insert_edge(4, 2, 3);
+        g.insert_edge(4, 3, 3);
+        g.insert_edge(0, 1, 1);
+        g
     }
 }
