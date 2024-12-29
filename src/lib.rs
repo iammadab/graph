@@ -173,6 +173,86 @@ mod tests {
         g
     }
 
+    fn directed_graph() -> Graph {
+        let mut g = Graph::new(6, false);
+        g.insert_edge(0, 1, 1);
+        g.insert_edge(0, 3, 1);
+        g.insert_edge(1, 2, 1);
+        g.insert_edge(1, 4, 1);
+        g.insert_edge(4, 0, 1);
+        g.insert_edge(4, 2, 1);
+        g.insert_edge(2, 5, 1);
+        g.insert_edge(2, 2, 1);
+        g.insert_edge(5, 2, 1);
+        g.insert_edge(5, 4, 1);
+        g
+    }
+
+    /// Takes the values in the vec as roots of some polynomial
+    /// and evaluates it at one point for identity testing
+    fn perm(values: Vec<usize>) -> usize {
+        values.iter().map(|v| v + 45).product()
+    }
+
+    #[test]
+    fn test_neighbors() {
+        let graph = undirected_graph();
+        assert_eq!(
+            perm(
+                graph.nodes[0]
+                    .get_neighbors()
+                    .into_iter()
+                    .collect::<Vec<_>>()
+            ),
+            perm(vec![1, 3, 4])
+        );
+        assert_eq!(
+            perm(
+                graph.nodes[1]
+                    .get_neighbors()
+                    .into_iter()
+                    .collect::<Vec<_>>()
+            ),
+            perm(vec![0, 2, 4])
+        );
+        assert_eq!(
+            perm(
+                graph.nodes[2]
+                    .get_neighbors()
+                    .into_iter()
+                    .collect::<Vec<_>>()
+            ),
+            perm(vec![1, 4, 5])
+        );
+        assert_eq!(
+            perm(
+                graph.nodes[3]
+                    .get_neighbors()
+                    .into_iter()
+                    .collect::<Vec<_>>()
+            ),
+            perm(vec![0])
+        );
+        assert_eq!(
+            perm(
+                graph.nodes[4]
+                    .get_neighbors()
+                    .into_iter()
+                    .collect::<Vec<_>>()
+            ),
+            perm(vec![0, 1, 2, 5])
+        );
+        assert_eq!(
+            perm(
+                graph.nodes[5]
+                    .get_neighbors()
+                    .into_iter()
+                    .collect::<Vec<_>>()
+            ),
+            perm(vec![2, 4])
+        );
+    }
+
     #[test]
     fn test_degree() {
         let graph = undirected_graph();
@@ -182,5 +262,27 @@ mod tests {
         assert_eq!(graph.nodes[3].degree(), 1);
         assert_eq!(graph.nodes[4].degree(), 4);
         assert_eq!(graph.nodes[5].degree(), 2);
+    }
+
+    #[test]
+    fn test_in_degree() {
+        let graph = directed_graph();
+        assert_eq!(graph.in_degree(0), 1);
+        assert_eq!(graph.in_degree(1), 1);
+        assert_eq!(graph.in_degree(2), 4);
+        assert_eq!(graph.in_degree(3), 1);
+        assert_eq!(graph.in_degree(4), 2);
+        assert_eq!(graph.in_degree(5), 1);
+    }
+
+    #[test]
+    fn test_out_degree() {
+        let graph = directed_graph();
+        assert_eq!(graph.nodes[0].out_degree(), 2);
+        assert_eq!(graph.nodes[1].out_degree(), 2);
+        assert_eq!(graph.nodes[2].out_degree(), 2);
+        assert_eq!(graph.nodes[3].out_degree(), 0);
+        assert_eq!(graph.nodes[4].out_degree(), 2);
+        assert_eq!(graph.nodes[5].out_degree(), 2);
     }
 }
