@@ -2,25 +2,25 @@ use std::collections::HashMap;
 
 /// Represents a graph edge
 struct Edge {
-    from: u8,
-    to: u8,
+    from: usize,
+    to: usize,
     weight: usize,
 }
 
 impl Edge {
-    fn new(from: u8, to: u8, weight: usize) -> Self {
+    fn new(from: usize, to: usize, weight: usize) -> Self {
         Self { from, to, weight }
     }
 }
 
 /// Represents a graph node
 struct Node {
-    index: u8,
-    edges: HashMap<u8, Edge>,
+    index: usize,
+    edges: HashMap<usize, Edge>,
 }
 
 impl Node {
-    fn new(index: u8) -> Self {
+    fn new(index: usize) -> Self {
         Self {
             index,
             edges: HashMap::new(),
@@ -31,16 +31,16 @@ impl Node {
         self.edges.len()
     }
 
-    fn get_edge(&self, neighbor: u8) -> Option<&Edge> {
+    fn get_edge(&self, neighbor: usize) -> Option<&Edge> {
         self.edges.get(&neighbor)
     }
 
-    fn add_edge(&mut self, neighbor: u8, weight: usize) {
+    fn add_edge(&mut self, neighbor: usize, weight: usize) {
         self.edges
             .insert(neighbor, Edge::new(self.index, neighbor, weight));
     }
 
-    fn remove_edge(&mut self, neighbor: u8) {
+    fn remove_edge(&mut self, neighbor: usize) {
         self.edges.remove(&neighbor);
     }
 
@@ -55,5 +55,43 @@ impl Node {
             .into_iter()
             .map(|n| &self.edges[n])
             .collect::<Vec<_>>()
+    }
+}
+
+/// Represents the full Graph structure
+struct Graph {
+    nodes: Vec<Node>,
+    undirected: bool,
+}
+
+impl Graph {
+    fn new(num_of_nodes: usize, undirected: bool) -> Self {
+        Self {
+            nodes: (0..num_of_nodes).map(Node::new).collect(),
+            undirected,
+        }
+    }
+
+    fn num_of_nodes(&self) -> usize {
+        self.nodes.len()
+    }
+
+    fn get_edge(&self, from: usize, to: usize) -> Option<&Edge> {
+        if from >= self.num_of_nodes() || to >= self.num_of_nodes() {
+            panic!("invalid edge id");
+        }
+
+        self.nodes[from].get_edge(to)
+    }
+
+    fn is_edge(&self, from: usize, to: usize) -> bool {
+        self.get_edge(from, to).is_some()
+    }
+
+    fn make_edge_list(&self) -> Vec<&Edge> {
+        self.nodes
+            .iter()
+            .flat_map(|node| node.get_edge_list())
+            .collect()
     }
 }
