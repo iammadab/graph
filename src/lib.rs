@@ -67,6 +67,16 @@ impl Node {
     fn get_out_neighbors(&self) -> HashSet<usize> {
         self.get_neighbors()
     }
+
+    /// Represents the number of edges connected to a node
+    fn degree(&self) -> usize {
+        self.edges.len()
+    }
+
+    /// Represents the number of outgoing edges from a node
+    fn out_degree(&self) -> usize {
+        self.degree()
+    }
 }
 
 #[derive(Clone)]
@@ -138,6 +148,11 @@ impl Graph {
             })
             .map(|node| node.index)
             .collect()
+    }
+
+    /// Returns the total number of incoming edges to a node
+    fn in_degree(&self, target_node: usize) -> usize {
+        self.get_in_neighbors(target_node).len()
     }
 }
 
