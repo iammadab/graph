@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Clone)]
 /// Represents a graph edge
@@ -58,6 +58,15 @@ impl Node {
             .map(|n| &self.edges[n])
             .collect::<Vec<_>>()
     }
+
+    fn get_neighbors(&self) -> HashSet<usize> {
+        self.edges.values().map(|edge| edge.to).collect()
+    }
+
+    /// Assumes directed graph, returns edges that have this node as the from node
+    fn get_out_neighbors(&self) -> HashSet<usize> {
+        self.get_neighbors()
+    }
 }
 
 #[derive(Clone)]
@@ -112,6 +121,23 @@ impl Graph {
         let new_node = Node::new(self.num_of_nodes());
         self.nodes.push(new_node);
         &self.nodes[self.num_of_nodes() - 1]
+    }
+
+    /// Returns the list of all nodes that point to the target node
+    /// Assumes directed graph
+    fn get_in_neighbors(&self, target_node: usize) -> HashSet<usize> {
+        self.nodes
+            .iter()
+            .filter(|node| {
+                for edge in node.get_edge_list() {
+                    if edge.to == target_node {
+                        return true;
+                    }
+                }
+                false
+            })
+            .map(|node| node.index)
+            .collect()
     }
 }
 
