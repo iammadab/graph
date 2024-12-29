@@ -160,17 +160,27 @@ impl Graph {
 mod tests {
     use super::*;
 
-    fn directed_graph() -> Graph {
-        let mut g = Graph::new(5, false);
+    fn undirected_graph() -> Graph {
+        let mut g = Graph::new(6, true);
         g.insert_edge(0, 1, 1);
         g.insert_edge(0, 3, 1);
-        g.insert_edge(0, 4, 3);
-        g.insert_edge(1, 2, 2);
+        g.insert_edge(0, 4, 1);
         g.insert_edge(1, 4, 1);
-        g.insert_edge(3, 4, 3);
-        g.insert_edge(4, 2, 3);
-        g.insert_edge(4, 3, 3);
-        g.insert_edge(0, 1, 1);
+        g.insert_edge(1, 2, 1);
+        g.insert_edge(2, 4, 1);
+        g.insert_edge(2, 5, 1);
+        g.insert_edge(4, 5, 1);
         g
+    }
+
+    #[test]
+    fn test_degree() {
+        let graph = undirected_graph();
+        assert_eq!(graph.nodes[0].degree(), 3);
+        assert_eq!(graph.nodes[1].degree(), 3);
+        assert_eq!(graph.nodes[2].degree(), 3);
+        assert_eq!(graph.nodes[3].degree(), 1);
+        assert_eq!(graph.nodes[4].degree(), 4);
+        assert_eq!(graph.nodes[5].degree(), 2);
     }
 }
