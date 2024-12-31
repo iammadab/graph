@@ -163,7 +163,10 @@ impl Graph {
         self.get_in_neighbors(target_node).len()
     }
 
-    // TODO: add documentation
+    /// Generates a subgraph for a target node
+    /// if closed the subgraph will contain the target node, its neighbors and all edges between
+    /// the relevant nodes
+    /// if not closed, same as above but removes the target node and its edges
     fn neighborhood_subgraph(self, target_node: usize, closed: bool) -> Self {
         if !self.undirected {
             panic!("neighborhood_subgraph only implemented for undirected graphs");
