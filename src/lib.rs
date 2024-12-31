@@ -3,6 +3,8 @@
 
 use std::collections::{HashMap, HashSet};
 
+mod util;
+
 #[derive(Clone)]
 /// Represents a graph edge
 struct Edge {
@@ -19,7 +21,7 @@ impl Edge {
 
 /// Represents a graph node
 #[derive(Clone)]
-struct Node {
+pub(crate) struct Node {
     index: usize,
     edges: HashMap<usize, Edge>,
 }
@@ -84,7 +86,7 @@ impl Node {
 
 #[derive(Clone)]
 /// Represents the full Graph structure
-struct Graph {
+pub(crate) struct Graph {
     nodes: Vec<Node>,
     undirected: bool,
 }
