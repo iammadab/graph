@@ -337,10 +337,4 @@ pub(crate) mod tests {
         assert_eq!(graph.nodes[4].out_degree(), 2);
         assert_eq!(graph.nodes[5].out_degree(), 2);
     }
-
-    #[test]
-    fn test_subgraph() {
-        let g = undirected_graph();
-        dbg!(g.neighborhood_subgraph(1, true));
-    }
 }
