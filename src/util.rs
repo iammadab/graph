@@ -6,23 +6,15 @@ use crate::Graph;
 /// 1 -> neigbors are fully connected
 /// 0 -> no connection between neighbors
 fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
+    // the following algorithm only works for undirected graphs
+    if !g.undirected {
+        panic!("current implementation of clustering coefficient only accepts undirected graphs");
+    }
+
     let neighbors = g.nodes[node].get_neighbors();
     let total_possible_connections = (neighbors.len() * (neighbors.len() - 1)) / 2;
 
-    // count the number of actual connections
-
-    // Rough
-    // for each neighbor, get their edge list and check if their destination
-    // node also exists in the neighbor list
-    // some constraints
-    // if we have nodes u and v, both in the neighbor list for n
-    // then we'd encounter u -> v and v -> u
-    // they are the same, hence we should only count them as 1
-    // the book chooses to only count when u < v which guarantees only picking 1
-    // but what if we have a directed graph??
-    // if it is directed, then we don't need to exclude
-    // TODO: test the effect of this algorithm on directed graphs
-
+    // count actual connections
     let mut count = 0;
     for neighbor in &neighbors {
         for edge in g.nodes[*neighbor].get_edge_list() {
@@ -43,7 +35,7 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::tests::undirected_graph;
+    use crate::tests::{directed_graph, undirected_graph};
 
     use super::clustering_coefficient;
 
