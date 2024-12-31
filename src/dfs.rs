@@ -25,12 +25,8 @@ where
 }
 
 /// Helper function to recursively apply the dfs core logic
-pub(crate) fn dfs_recursive_basic<F>(
-    g: &Graph,
-    start_node: usize,
-    seen: &mut Vec<bool>,
-    apply_fn: &mut F,
-) where
+pub fn dfs_recursive_basic<F>(g: &Graph, start_node: usize, seen: &mut Vec<bool>, apply_fn: &mut F)
+where
     F: FnMut(usize, usize),
 {
     seen[start_node] = true;
@@ -91,12 +87,47 @@ pub(crate) fn dfs_stack_path(g: &Graph, start_node: usize) -> Vec<Option<usize>>
     prev_node_list
 }
 
+/// Partitions a graph into components, all nodes in a component can reach one another
+/// if there is not path between node a and node b then node a will belong in a different
+/// component from node b
+pub(crate) fn dfs_connected_components(g: &Graph) -> Vec<usize> {
+    let mut component_list = vec![None; g.num_of_nodes()];
+    let mut curr_comp = 0;
+
+    for node_id in 0..g.num_of_nodes() {
+        // if the current node is not visited then dfs
+        // all nodes that can be reached from it belongs in the same component
+        if component_list[node_id].is_some() {
+            continue;
+        }
+        dfs_recursive_connected_components(g, node_id, &mut component_list, curr_comp);
+        // increment the curr component, any unvisited node belongs in a different component
+        curr_comp += 1;
+    }
+
+    component_list.into_iter().map(|v| v.unwrap()).collect()
+}
+
+fn dfs_recursive_connected_components(
+    g: &Graph,
+    node_id: usize,
+    component_list: &mut [Option<usize>],
+    curr_component: usize,
+) {
+    component_list[node_id] = Some(curr_component);
+    for neighbor in g.nodes[node_id].get_neighbors() {
+        if component_list[neighbor].is_none() {
+            dfs_recursive_connected_components(g, neighbor, component_list, curr_component);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{
-        dfs::{dfs_recursive_path_all, dfs_stack_path},
+        dfs::{dfs_connected_components, dfs_recursive_path_all, dfs_stack_path},
         path::check_previous_node_list_valid,
-        tests::ten_node_undirected_graph,
+        tests::{disconnected_undirected_graph, ten_node_undirected_graph},
     };
 
     #[test]
@@ -115,5 +146,14 @@ mod tests {
             &graph,
             &dfs_stack_path(&graph, 0)
         ));
+    }
+
+    #[test]
+    fn test_connected_components() {
+        let graph = disconnected_undirected_graph();
+        assert_eq!(
+            dfs_connected_components(&graph),
+            vec![0, 0, 0, 1, 0, 2, 2, 1]
+        );
     }
 }
