@@ -53,7 +53,10 @@ fn average_clustering_coefficient(g: &Graph) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::tests::{directed_graph, undirected_graph};
+    use crate::{
+        tests::{directed_graph, undirected_graph},
+        util::average_clustering_coefficient,
+    };
 
     use super::clustering_coefficient;
 
@@ -66,5 +69,12 @@ mod tests {
         assert_eq!(clustering_coefficient(&g, 3), 0.0);
         assert_eq!(clustering_coefficient(&g, 4), 1.0 / 2.0);
         assert_eq!(clustering_coefficient(&g, 5), 1.0);
+    }
+
+    #[test]
+    fn test_averaget_clustering_coefficient_undirected() {
+        let g = undirected_graph();
+        // compare floats via epsilon
+        assert!((average_clustering_coefficient(&g) - 0.5278).abs() < 0.0001);
     }
 }
