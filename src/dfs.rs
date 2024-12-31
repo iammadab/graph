@@ -56,6 +56,11 @@ pub(crate) fn dfs_recursive_path(g: &Graph, start_node: usize) -> Vec<Option<usi
 
 /// Performs dfs and records path information in prev_node representation
 /// doesn't require a starting node
+/// this will behave exactly like dfs_recursive_path if there is no partition in the graph
+/// but once we have disconnected chunks, basic will only be able to identify 1 partition
+/// (based on the starting node)
+/// all will be able to identify all partitions, indexes with None, represents starting elements
+/// from different partitions
 pub(crate) fn dfs_recursive_path_all(g: &Graph) -> Vec<Option<usize>> {
     let mut prev_node_list = vec![None; g.num_of_nodes()];
     let update_list = |prev_node, new_node| {
