@@ -40,3 +40,21 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
 
     count as f64 / total_possible_connections as f64
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::tests::undirected_graph;
+
+    use super::clustering_coefficient;
+
+    #[test]
+    fn test_clustering_coefficient_undirected() {
+        let g = undirected_graph();
+        assert_eq!(clustering_coefficient(&g, 0), 1.0 / 3.0);
+        assert_eq!(clustering_coefficient(&g, 1), 2.0 / 3.0);
+        assert_eq!(clustering_coefficient(&g, 2), 2.0 / 3.0);
+        assert_eq!(clustering_coefficient(&g, 3), 0.0);
+        assert_eq!(clustering_coefficient(&g, 4), 1.0 / 2.0);
+        assert_eq!(clustering_coefficient(&g, 5), 1.0);
+    }
+}

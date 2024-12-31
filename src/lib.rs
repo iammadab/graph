@@ -162,10 +162,10 @@ impl Graph {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
 
-    fn undirected_graph() -> Graph {
+    pub(crate) fn undirected_graph() -> Graph {
         let mut g = Graph::new(6, true);
         g.insert_edge(0, 1, 1.0);
         g.insert_edge(0, 3, 1.0);
@@ -178,7 +178,7 @@ mod tests {
         g
     }
 
-    fn directed_graph() -> Graph {
+    pub(crate) fn directed_graph() -> Graph {
         let mut g = Graph::new(6, false);
         g.insert_edge(0, 1, 1.0);
         g.insert_edge(0, 3, 1.0);
