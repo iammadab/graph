@@ -18,7 +18,11 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
     let mut count = 0;
     for neighbor in &neighbors {
         for edge in g.nodes[*neighbor].get_edge_list() {
-            // TODO: explain this condition
+            // for every connected neighbor u and v
+            // they will appear in this loop twice
+            // as (u -> v) and as (v -> u)
+            // since we only need 1 for the count we can constraint
+            // by some arbirary ordering e.g. u > v
             if edge.to > *neighbor && neighbors.contains(&edge.to) {
                 count += 1;
             }
