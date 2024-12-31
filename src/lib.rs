@@ -7,6 +7,7 @@ use std::{
 };
 
 mod clustering;
+mod path;
 
 #[derive(Clone, Debug)]
 /// Represents a graph edge
