@@ -278,6 +278,16 @@ pub(crate) mod tests {
         g
     }
 
+    pub(crate) fn disconnected_undirected_graph() -> Graph {
+        let mut g = Graph::new(8, true);
+        g.insert_edge(0, 1, 0.0);
+        g.insert_edge(0, 4, 0.0);
+        g.insert_edge(1, 2, 0.0);
+        g.insert_edge(3, 7, 0.0);
+        g.insert_edge(5, 6, 0.0);
+        g
+    }
+
     /// Takes the values in the vec as roots of some polynomial
     /// and evaluates it at one point for identity testing
     fn perm(values: Vec<usize>) -> usize {
