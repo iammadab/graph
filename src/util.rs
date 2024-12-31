@@ -37,6 +37,20 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
     count as f64 / total_possible_connections as f64
 }
 
+// TODO: add documentation
+fn average_clustering_coefficient(g: &Graph) -> f64 {
+    let total: f64 = (0..g.num_of_nodes())
+        .map(|node_id| clustering_coefficient(g, node_id))
+        .sum();
+
+    // prevent dividing by 0
+    if g.num_of_nodes() == 0 {
+        return 0.0;
+    }
+
+    total / g.num_of_nodes() as f64
+}
+
 #[cfg(test)]
 mod tests {
     use crate::tests::{directed_graph, undirected_graph};
