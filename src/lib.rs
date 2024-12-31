@@ -7,6 +7,7 @@ use std::{
 };
 
 mod clustering;
+mod dfs;
 mod path;
 
 #[derive(Clone, Debug)]
