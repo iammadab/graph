@@ -8,7 +8,7 @@ use std::{
 
 mod clustering;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 /// Represents a graph edge
 struct Edge {
     from: usize,
@@ -23,7 +23,7 @@ impl Edge {
 }
 
 /// Represents a graph node
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub(crate) struct Node {
     index: usize,
     edges: HashMap<usize, Edge>,
@@ -87,7 +87,7 @@ impl Node {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 /// Represents the full Graph structure
 pub(crate) struct Graph {
     nodes: Vec<Node>,
@@ -184,6 +184,8 @@ impl Graph {
             .enumerate()
             .map(|(new_index, old_index)| (*old_index, new_index))
             .collect();
+
+        dbg!(&index_map);
 
         // construct subgraph
         let mut graph = Graph::new(nodes_in_subgraph.len(), true);
@@ -334,5 +336,11 @@ pub(crate) mod tests {
         assert_eq!(graph.nodes[3].out_degree(), 0);
         assert_eq!(graph.nodes[4].out_degree(), 2);
         assert_eq!(graph.nodes[5].out_degree(), 2);
+    }
+
+    #[test]
+    fn test_subgraph() {
+        let g = undirected_graph();
+        dbg!(g.neighborhood_subgraph(1, true));
     }
 }
