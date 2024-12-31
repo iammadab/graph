@@ -7,6 +7,7 @@ use std::{
 };
 
 mod clustering;
+mod dfs;
 mod path;
 
 #[derive(Clone, Debug)]
@@ -256,6 +257,24 @@ pub(crate) mod tests {
         g.insert_edge(4, 5, 2.0);
         g.insert_edge(5, 2, 1.0);
         g.insert_edge(5, 4, 1.0);
+        g
+    }
+
+    pub(crate) fn ten_node_undirected_graph() -> Graph {
+        let mut g = Graph::new(10, true);
+        g.insert_edge(0, 1, 0.0);
+        g.insert_edge(0, 5, 0.0);
+        g.insert_edge(0, 7, 0.0);
+        g.insert_edge(1, 2, 0.0);
+        g.insert_edge(2, 3, 0.0);
+        g.insert_edge(2, 5, 0.0);
+        g.insert_edge(2, 4, 0.0);
+        g.insert_edge(4, 9, 0.0);
+        g.insert_edge(5, 6, 0.0);
+        g.insert_edge(5, 8, 0.0);
+        g.insert_edge(6, 8, 0.0);
+        g.insert_edge(7, 8, 0.0);
+        g.insert_edge(8, 9, 0.0);
         g
     }
 
