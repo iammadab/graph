@@ -1,3 +1,6 @@
+// TODO: remove this
+#![allow(unused)]
+
 use std::collections::{HashMap, HashSet};
 
 #[derive(Clone)]
@@ -5,11 +8,11 @@ use std::collections::{HashMap, HashSet};
 struct Edge {
     from: usize,
     to: usize,
-    weight: usize,
+    weight: f64,
 }
 
 impl Edge {
-    fn new(from: usize, to: usize, weight: usize) -> Self {
+    fn new(from: usize, to: usize, weight: f64) -> Self {
         Self { from, to, weight }
     }
 }
@@ -37,7 +40,7 @@ impl Node {
         self.edges.get(&neighbor)
     }
 
-    fn add_edge(&mut self, neighbor: usize, weight: usize) {
+    fn add_edge(&mut self, neighbor: usize, weight: f64) {
         self.edges
             .insert(neighbor, Edge::new(self.index, neighbor, weight));
     }
@@ -113,7 +116,7 @@ impl Graph {
             .collect()
     }
 
-    fn insert_edge(&mut self, from: usize, to: usize, weight: usize) {
+    fn insert_edge(&mut self, from: usize, to: usize, weight: f64) {
         self.nodes[from].add_edge(to, weight);
         if self.undirected {
             self.nodes[to].add_edge(from, weight);
@@ -162,29 +165,29 @@ mod tests {
 
     fn undirected_graph() -> Graph {
         let mut g = Graph::new(6, true);
-        g.insert_edge(0, 1, 1);
-        g.insert_edge(0, 3, 1);
-        g.insert_edge(0, 4, 1);
-        g.insert_edge(1, 4, 1);
-        g.insert_edge(1, 2, 1);
-        g.insert_edge(2, 4, 1);
-        g.insert_edge(2, 5, 1);
-        g.insert_edge(4, 5, 1);
+        g.insert_edge(0, 1, 1.0);
+        g.insert_edge(0, 3, 1.0);
+        g.insert_edge(0, 4, 1.0);
+        g.insert_edge(1, 4, 1.0);
+        g.insert_edge(1, 2, 1.0);
+        g.insert_edge(2, 4, 1.0);
+        g.insert_edge(2, 5, 1.0);
+        g.insert_edge(4, 5, 1.0);
         g
     }
 
     fn directed_graph() -> Graph {
         let mut g = Graph::new(6, false);
-        g.insert_edge(0, 1, 1);
-        g.insert_edge(0, 3, 1);
-        g.insert_edge(1, 2, 1);
-        g.insert_edge(1, 4, 1);
-        g.insert_edge(4, 0, 1);
-        g.insert_edge(4, 2, 1);
-        g.insert_edge(2, 5, 1);
-        g.insert_edge(2, 2, 1);
-        g.insert_edge(5, 2, 1);
-        g.insert_edge(5, 4, 1);
+        g.insert_edge(0, 1, 1.0);
+        g.insert_edge(0, 3, 1.0);
+        g.insert_edge(1, 2, 1.0);
+        g.insert_edge(1, 4, 1.0);
+        g.insert_edge(4, 0, 1.0);
+        g.insert_edge(4, 2, 1.0);
+        g.insert_edge(2, 5, 1.0);
+        g.insert_edge(2, 2, 1.0);
+        g.insert_edge(5, 2, 1.0);
+        g.insert_edge(5, 4, 1.0);
         g
     }
 
