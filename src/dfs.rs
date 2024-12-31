@@ -45,7 +45,7 @@ pub(crate) fn dfs_recursive_basic<F>(
 
 /// Performs dfs and records path information in prev_node representation
 /// requires a starting node
-pub(crate) fn dfs_path(g: &Graph, start_node: usize) -> Vec<Option<usize>> {
+pub(crate) fn dfs_recursive_path(g: &Graph, start_node: usize) -> Vec<Option<usize>> {
     let mut prev_node_list = vec![None; g.num_of_nodes()];
     let update_list = |prev_node, new_node| {
         prev_node_list[new_node] = Some(prev_node);
@@ -56,7 +56,7 @@ pub(crate) fn dfs_path(g: &Graph, start_node: usize) -> Vec<Option<usize>> {
 
 /// Performs dfs and records path information in prev_node representation
 /// doesn't require a starting node
-pub(crate) fn dfs_path_all(g: &Graph) -> Vec<Option<usize>> {
+pub(crate) fn dfs_recursive_path_all(g: &Graph) -> Vec<Option<usize>> {
     let mut prev_node_list = vec![None; g.num_of_nodes()];
     let update_list = |prev_node, new_node| {
         prev_node_list[new_node] = Some(prev_node);
@@ -68,8 +68,7 @@ pub(crate) fn dfs_path_all(g: &Graph) -> Vec<Option<usize>> {
 #[cfg(test)]
 mod tests {
     use crate::{
-        dfs::{dfs_path, dfs_path_all},
-        path::check_previous_node_list_valid,
+        dfs::dfs_recursive_path_all, path::check_previous_node_list_valid,
         tests::ten_node_undirected_graph,
     };
 
@@ -78,7 +77,7 @@ mod tests {
         let graph = ten_node_undirected_graph();
         assert!(check_previous_node_list_valid(
             &graph,
-            &dfs_path_all(&graph)
+            &dfs_recursive_path_all(&graph)
         ));
     }
 }
