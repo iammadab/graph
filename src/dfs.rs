@@ -70,19 +70,50 @@ pub(crate) fn dfs_recursive_path_all(g: &Graph) -> Vec<Option<usize>> {
     prev_node_list
 }
 
+pub(crate) fn dfs_stack_path(g: &Graph, start_node: usize) -> Vec<Option<usize>> {
+    let mut stack = vec![start_node];
+    let mut prev_node_list = vec![None; g.num_of_nodes()];
+    let mut seen = vec![false; g.num_of_nodes()];
+
+    while let Some(node_id) = stack.pop() {
+        if !seen[node_id] {
+            seen[node_id] = true;
+            let current_node = &g.nodes[node_id];
+            for neighbor in current_node.get_neighbors() {
+                if !seen[neighbor] {
+                    prev_node_list[neighbor] = Some(node_id);
+                    stack.push(neighbor);
+                }
+            }
+        }
+    }
+
+    prev_node_list
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{
-        dfs::dfs_recursive_path_all, path::check_previous_node_list_valid,
+        dfs::{dfs_recursive_path_all, dfs_stack_path},
+        path::check_previous_node_list_valid,
         tests::ten_node_undirected_graph,
     };
 
     #[test]
-    fn test_dfs_path_generation() {
+    fn test_dfs_recursive_path_generation() {
         let graph = ten_node_undirected_graph();
         assert!(check_previous_node_list_valid(
             &graph,
             &dfs_recursive_path_all(&graph)
+        ));
+    }
+
+    #[test]
+    fn test_dfs_stack_path_generation() {
+        let graph = ten_node_undirected_graph();
+        assert!(check_previous_node_list_valid(
+            &graph,
+            &dfs_stack_path(&graph, 0)
         ));
     }
 }
