@@ -50,12 +50,28 @@ pub(crate) fn check_edge_path_valid(g: &Graph, path: Vec<(usize, usize)>) -> boo
 
 #[cfg(test)]
 mod tests {
-    use crate::{path::check_node_path_valid, tests::undirected_graph};
+    use crate::{
+        path::{check_edge_path_valid, check_node_path_valid},
+        tests::undirected_graph,
+    };
 
     #[test]
-    fn test_node_path_valid() {
+    fn test_path_node_list_valid() {
         let graph = undirected_graph();
         assert!(check_node_path_valid(&graph, vec![1, 2, 4, 5]));
         assert!(!check_node_path_valid(&graph, vec![2, 5, 4, 3]));
+    }
+
+    #[test]
+    fn test_path_edge_list_valid() {
+        let graph = undirected_graph();
+        assert!(check_edge_path_valid(
+            &graph,
+            vec![(0, 1), (1, 4), (4, 5), (5, 2)]
+        ));
+        assert!(!check_edge_path_valid(
+            &graph,
+            vec![(0, 1), (1, 3), (4, 5), (5, 2)]
+        ));
     }
 }
