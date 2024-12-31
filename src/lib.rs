@@ -1,11 +1,14 @@
 // TODO: remove this
 #![allow(unused)]
 
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    iter::{empty, once},
+};
 
-mod util;
+mod clustering;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 /// Represents a graph edge
 struct Edge {
     from: usize,
@@ -20,7 +23,7 @@ impl Edge {
 }
 
 /// Represents a graph node
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub(crate) struct Node {
     index: usize,
     edges: HashMap<usize, Edge>,
@@ -84,7 +87,7 @@ impl Node {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 /// Represents the full Graph structure
 pub(crate) struct Graph {
     nodes: Vec<Node>,
@@ -158,6 +161,50 @@ impl Graph {
     /// Returns the total number of incoming edges to a node
     fn in_degree(&self, target_node: usize) -> usize {
         self.get_in_neighbors(target_node).len()
+    }
+
+    /// Generates a subgraph for a target node
+    /// if closed the subgraph will contain the target node, its neighbors and all edges between
+    /// the relevant nodes
+    /// if not closed, same as above but removes the target node and its edges
+    fn neighborhood_subgraph(self, target_node: usize, closed: bool) -> Self {
+        if !self.undirected {
+            panic!("neighborhood_subgraph only implemented for undirected graphs");
+        }
+
+        let mut nodes_in_subgraph = self.nodes[target_node].get_neighbors();
+        if closed {
+            nodes_in_subgraph.insert(target_node);
+        }
+
+        // the new graph will have nodes indexed contiguously from 0
+        // which might be different from their old label in global graph
+        let index_map: HashMap<usize, usize> = nodes_in_subgraph
+            .iter()
+            .enumerate()
+            .map(|(new_index, old_index)| (*old_index, new_index))
+            .collect();
+
+        dbg!(&index_map);
+
+        // construct subgraph
+        let mut graph = Graph::new(nodes_in_subgraph.len(), true);
+
+        for node in &nodes_in_subgraph {
+            for edge in self.nodes[*node].get_edge_list() {
+                // only keep edges whose to and from nodes exist in nodes to use
+                // we add arbitrary ordering constraints to prevent duplication
+                if nodes_in_subgraph.contains(&edge.to) && edge.to > *node {
+                    graph.insert_edge(
+                        *index_map.get(&edge.to).unwrap(),
+                        *index_map.get(&edge.from).unwrap(),
+                        edge.weight,
+                    );
+                }
+            }
+        }
+
+        graph
     }
 }
 

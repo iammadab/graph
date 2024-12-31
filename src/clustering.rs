@@ -1,5 +1,3 @@
-use core::f64;
-
 use crate::Graph;
 
 /// Measures how degree of connection between a given nodes neighbors
@@ -54,8 +52,8 @@ fn average_clustering_coefficient(g: &Graph) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::{
+        clustering::average_clustering_coefficient,
         tests::{directed_graph, undirected_graph},
-        util::average_clustering_coefficient,
     };
 
     use super::clustering_coefficient;
