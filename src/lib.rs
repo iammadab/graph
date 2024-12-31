@@ -241,6 +241,24 @@ pub(crate) mod tests {
         g
     }
 
+    pub(crate) fn weighted_directed_graph() -> Graph {
+        let mut g = Graph::new(6, false);
+        g.insert_edge(0, 1, 5.0);
+        g.insert_edge(0, 3, 1.0);
+        g.insert_edge(0, 4, 2.5);
+        g.insert_edge(1, 0, 4.0);
+        g.insert_edge(1, 2, 1.0);
+        g.insert_edge(2, 1, 3.0);
+        g.insert_edge(3, 4, 3.0);
+        g.insert_edge(4, 1, 1.0);
+        g.insert_edge(4, 2, 5.0);
+        g.insert_edge(4, 3, 1.0);
+        g.insert_edge(4, 5, 2.0);
+        g.insert_edge(5, 2, 1.0);
+        g.insert_edge(5, 4, 1.0);
+        g
+    }
+
     /// Takes the values in the vec as roots of some polynomial
     /// and evaluates it at one point for identity testing
     fn perm(values: Vec<usize>) -> usize {

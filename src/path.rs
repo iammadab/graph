@@ -100,8 +100,8 @@ pub(crate) fn path_cost(g: &Graph, path: &[(usize, usize)]) -> f64 {
 #[cfg(test)]
 mod tests {
     use crate::{
-        path::{check_edge_path_valid, check_node_path_valid},
-        tests::undirected_graph,
+        path::{check_edge_path_valid, check_node_path_valid, path_cost},
+        tests::{undirected_graph, weighted_directed_graph},
     };
 
     use super::node_list_from_prev_node_list;
@@ -136,5 +136,12 @@ mod tests {
             node_list_from_prev_node_list(&prev_node_list, 9),
             vec![0, 5, 8, 9]
         );
+    }
+
+    #[test]
+    fn test_path_cost_computation() {
+        let g = weighted_directed_graph();
+        let path = vec![(0, 3), (3, 4), (4, 2)];
+        assert_eq!(path_cost(&g, &path), 9.0);
     }
 }
