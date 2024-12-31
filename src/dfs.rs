@@ -29,15 +29,16 @@ pub(crate) fn dfs_recursive_basic<F>(
     g: &Graph,
     start_node: usize,
     seen: &mut Vec<bool>,
-    mut apply_fn: F,
+    apply_fn: &mut F,
 ) where
     F: FnMut(usize, usize),
 {
+    seen[start_node] = true;
     let current_node = &g.nodes[start_node];
     for neighbor in current_node.get_neighbors() {
         if !seen[neighbor] {
             apply_fn(start_node, neighbor);
-            dfs_recursive_basic(g, neighbor, seen, &mut apply_fn);
+            dfs_recursive_basic(g, neighbor, seen, apply_fn);
         }
     }
 }
@@ -62,4 +63,22 @@ pub(crate) fn dfs_path_all(g: &Graph) -> Vec<Option<usize>> {
     };
     dfs_basic_all(g, update_list);
     prev_node_list
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        dfs::{dfs_path, dfs_path_all},
+        path::check_previous_node_list_valid,
+        tests::ten_node_undirected_graph,
+    };
+
+    #[test]
+    fn test_dfs_path_generation() {
+        let graph = ten_node_undirected_graph();
+        assert!(check_previous_node_list_valid(
+            &graph,
+            &dfs_path_all(&graph)
+        ));
+    }
 }
