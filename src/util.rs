@@ -18,7 +18,11 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
     let mut count = 0;
     for neighbor in &neighbors {
         for edge in g.nodes[*neighbor].get_edge_list() {
-            // TODO: explain this condition
+            // for every connected neighbor u and v
+            // they will appear in this loop twice
+            // as (u -> v) and as (v -> u)
+            // since we only need 1 for the count we can constraint
+            // by some arbirary ordering e.g. u > v
             if edge.to > *neighbor && neighbors.contains(&edge.to) {
                 count += 1;
             }
@@ -33,9 +37,26 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
     count as f64 / total_possible_connections as f64
 }
 
+/// Computes the average local clustering coefficient for all nodes in the graph
+fn average_clustering_coefficient(g: &Graph) -> f64 {
+    let total: f64 = (0..g.num_of_nodes())
+        .map(|node_id| clustering_coefficient(g, node_id))
+        .sum();
+
+    // prevent dividing by 0
+    if g.num_of_nodes() == 0 {
+        return 0.0;
+    }
+
+    total / g.num_of_nodes() as f64
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::tests::{directed_graph, undirected_graph};
+    use crate::{
+        tests::{directed_graph, undirected_graph},
+        util::average_clustering_coefficient,
+    };
 
     use super::clustering_coefficient;
 
@@ -48,5 +69,12 @@ mod tests {
         assert_eq!(clustering_coefficient(&g, 3), 0.0);
         assert_eq!(clustering_coefficient(&g, 4), 1.0 / 2.0);
         assert_eq!(clustering_coefficient(&g, 5), 1.0);
+    }
+
+    #[test]
+    fn test_averaget_clustering_coefficient_undirected() {
+        let g = undirected_graph();
+        // compare floats via epsilon
+        assert!((average_clustering_coefficient(&g) - 0.5278).abs() < 0.0001);
     }
 }
