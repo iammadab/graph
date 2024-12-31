@@ -37,7 +37,7 @@ fn clustering_coefficient(g: &Graph, node: usize) -> f64 {
     count as f64 / total_possible_connections as f64
 }
 
-// TODO: add documentation
+/// Computes the average local clustering coefficient for all nodes in the graph
 fn average_clustering_coefficient(g: &Graph) -> f64 {
     let total: f64 = (0..g.num_of_nodes())
         .map(|node_id| clustering_coefficient(g, node_id))
