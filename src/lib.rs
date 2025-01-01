@@ -6,6 +6,7 @@ use std::{
     iter::{empty, once},
 };
 
+mod bfs;
 mod clustering;
 mod dfs;
 mod path;
