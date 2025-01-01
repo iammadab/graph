@@ -20,3 +20,15 @@ pub(crate) fn bfs(g: &Graph, start_node: usize) -> Vec<Option<usize>> {
 
     prev_node_list
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::bfs::bfs;
+    use crate::tests::ten_node_undirected_graph;
+
+    #[test]
+    fn test_bfs() {
+        let g = ten_node_undirected_graph();
+        dbg!(bfs(&g, 0));
+    }
+}
