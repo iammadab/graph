@@ -2,10 +2,11 @@
 #![allow(unused)]
 
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, BTreeSet},
     iter::{empty, once},
 };
 
+mod bfs;
 mod clustering;
 mod dfs;
 mod path;
@@ -28,14 +29,14 @@ impl Edge {
 #[derive(Clone, Debug)]
 pub(crate) struct Node {
     index: usize,
-    edges: HashMap<usize, Edge>,
+    edges: BTreeMap<usize, Edge>,
 }
 
 impl Node {
     fn new(index: usize) -> Self {
         Self {
             index,
-            edges: HashMap::new(),
+            edges: BTreeMap::new(),
         }
     }
 
@@ -69,12 +70,12 @@ impl Node {
             .collect::<Vec<_>>()
     }
 
-    fn get_neighbors(&self) -> HashSet<usize> {
+    fn get_neighbors(&self) -> BTreeSet<usize> {
         self.edges.values().map(|edge| edge.to).collect()
     }
 
     /// Assumes directed graph, returns edges that have this node as the from node
-    fn get_out_neighbors(&self) -> HashSet<usize> {
+    fn get_out_neighbors(&self) -> BTreeSet<usize> {
         self.get_neighbors()
     }
 
@@ -145,7 +146,7 @@ impl Graph {
 
     /// Returns the list of all nodes that point to the target node
     /// Assumes directed graph
-    fn get_in_neighbors(&self, target_node: usize) -> HashSet<usize> {
+    fn get_in_neighbors(&self, target_node: usize) -> BTreeSet<usize> {
         self.nodes
             .iter()
             .filter(|node| {
@@ -181,7 +182,7 @@ impl Graph {
 
         // the new graph will have nodes indexed contiguously from 0
         // which might be different from their old label in global graph
-        let index_map: HashMap<usize, usize> = nodes_in_subgraph
+        let index_map: BTreeMap<usize, usize> = nodes_in_subgraph
             .iter()
             .enumerate()
             .map(|(new_index, old_index)| (*old_index, new_index))
