@@ -6,6 +6,8 @@ use std::{
     iter::{empty, once},
 };
 
+mod graph;
+
 mod bfs;
 mod clustering;
 mod dfs;
