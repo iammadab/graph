@@ -4,7 +4,12 @@ pub(crate) type NodeId = usize;
 pub(crate) type Weight = usize;
 pub(crate) type Edge = (NodeId, Weight);
 
-// TODO: add documentation
+#[derive(PartialEq)]
+pub(crate) enum GraphType {
+    Directed,
+    Undirected,
+}
+
 pub(crate) trait Graph {
     type NodeType: Node;
 
