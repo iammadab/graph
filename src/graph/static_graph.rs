@@ -10,7 +10,6 @@ impl Node for StaticNode {
     }
 }
 
-// Graph
 struct StaticGraph {
     nodes: Vec<StaticNode>,
 }
