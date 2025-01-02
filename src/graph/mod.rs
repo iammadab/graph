@@ -1,5 +1,9 @@
 pub(crate) mod static_graph;
 
+pub(crate) type NodeId = usize;
+pub(crate) type Weight = usize;
+pub(crate) type Edge = (NodeId, Weight);
+
 // TODO: add documentation
 pub(crate) trait Graph {
     type NodeType: Node;
@@ -9,5 +13,5 @@ pub(crate) trait Graph {
 }
 
 pub(crate) trait Node {
-    fn neighbors(&self) -> &[usize];
+    fn neighbors(&self) -> impl Iterator<Item = NodeId>;
 }

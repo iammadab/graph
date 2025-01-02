@@ -1,14 +1,14 @@
 //! Represents a graph whose nodes and edges are known before hand
 
-use crate::graph::{Graph, Node};
+use crate::graph::{Edge, Graph, Node, NodeId};
 
 struct StaticNode {
-    edges: Vec<usize>,
+    edges: Vec<Edge>,
 }
 
 impl Node for StaticNode {
-    fn neighbors(&self) -> &[usize] {
-        &self.edges
+    fn neighbors(&self) -> impl Iterator<Item = NodeId> {
+        self.edges.iter().map(|e| e.0)
     }
 }
 
