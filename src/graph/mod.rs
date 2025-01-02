@@ -5,7 +5,6 @@ pub(crate) mod static_graph;
 
 pub(crate) type NodeId = usize;
 pub(crate) type Weight = f64;
-pub(crate) type Edge = (NodeId, Weight);
 
 #[derive(PartialEq)]
 pub(crate) enum GraphType {
@@ -38,7 +37,7 @@ pub(crate) trait Graph {
 
 pub(crate) trait Node {
     /// Returns the neighbors for a given node
-    fn neighbors(&self) -> impl Iterator<Item = NodeId>;
+    fn neighbors(&self) -> impl Iterator<Item = &NodeId>;
 }
 
 /// Holds search information about a given node
