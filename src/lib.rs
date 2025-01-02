@@ -6,6 +6,7 @@ use std::{
 };
 
 mod graph;
+mod search;
 
 mod bfs;
 mod clustering;
