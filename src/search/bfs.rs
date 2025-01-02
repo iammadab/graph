@@ -21,3 +21,14 @@ pub(crate) fn bfs<G: Graph>(graph: &G, start_node: usize) -> PrevNodeGraphPath {
 
     visited_tracker.prev_node_list()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::graph::static_graph::tests::ten_node_undirected_graph;
+
+    #[test]
+    fn test_bfs() {
+        let graph = ten_node_undirected_graph();
+    }
+}

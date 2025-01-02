@@ -12,7 +12,7 @@ pub(crate) struct StaticNode {
 
 impl Node for StaticNode {
     fn neighbors(&self) -> impl Iterator<Item = &NodeId> {
-        self.edges.keys().into_iter()
+        self.edges.keys()
     }
 }
 
