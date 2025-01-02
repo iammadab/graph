@@ -1,16 +1,18 @@
 //! Represents a graph whose nodes and edges are known before hand
+use std::collections::BTreeMap;
+
 use crate::graph::{Edge, Graph, GraphType, Node, NodeId, NodeTrackState, Weight};
 
 use super::VisitedTracker;
 
 pub(crate) struct StaticNode {
     index: usize,
-    edges: Vec<Edge>,
+    edges: BTreeMap<NodeId, Weight>,
 }
 
 impl Node for StaticNode {
-    fn neighbors(&self) -> impl Iterator<Item = NodeId> {
-        self.edges.iter().map(|e| e.0)
+    fn neighbors(&self) -> impl Iterator<Item = &NodeId> {
+        self.edges.keys().into_iter()
     }
 }
 
@@ -18,12 +20,12 @@ impl StaticNode {
     fn new(index: usize) -> Self {
         Self {
             index,
-            edges: vec![],
+            edges: BTreeMap::new(),
         }
     }
 
     fn add_edge(&mut self, neighbor: NodeId, weight: Weight) {
-        self.edges.push((neighbor, weight))
+        self.edges.insert(neighbor, weight);
     }
 }
 

@@ -11,10 +11,10 @@ pub(crate) fn bfs<G: Graph>(graph: &G, start_node: usize) -> PrevNodeGraphPath {
 
     while let Some(node_id) = queue.pop_front() {
         for neighbor in graph.node(node_id).unwrap().neighbors() {
-            if !visited_tracker.has_seen(neighbor) {
-                visited_tracker.set_seen(neighbor);
-                visited_tracker.set_prev(neighbor, node_id);
-                queue.push_back(neighbor);
+            if !visited_tracker.has_seen(*neighbor) {
+                visited_tracker.set_seen(*neighbor);
+                visited_tracker.set_prev(*neighbor, node_id);
+                queue.push_back(*neighbor);
             }
         }
     }

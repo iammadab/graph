@@ -10,9 +10,9 @@ pub(crate) fn dfs<G: Graph>(graph: &G, start_node: NodeId) -> PrevNodeGraphPath 
             visited_tracker.set_seen(node_id);
             let current_node = graph.node(node_id).unwrap();
             for neighbor in current_node.neighbors() {
-                if !visited_tracker.has_seen(neighbor) {
-                    visited_tracker.set_prev(neighbor, node_id);
-                    stack.push(neighbor);
+                if !visited_tracker.has_seen(*neighbor) {
+                    visited_tracker.set_prev(*neighbor, node_id);
+                    stack.push(*neighbor);
                 }
             }
         }

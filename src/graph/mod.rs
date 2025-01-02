@@ -38,7 +38,7 @@ pub(crate) trait Graph {
 
 pub(crate) trait Node {
     /// Returns the neighbors for a given node
-    fn neighbors(&self) -> impl Iterator<Item = NodeId>;
+    fn neighbors(&self) -> impl Iterator<Item = &NodeId>;
 }
 
 /// Holds search information about a given node
