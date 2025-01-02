@@ -1,8 +1,8 @@
-use crate::graph::{Graph, Node, NodeId};
+use crate::graph::{Graph, Node, NodeId, VisitedTracker};
 
-pub(crate) fn dfs_stack_path<G: Graph>(graph: &G, start_node: NodeId) {
+pub(crate) fn dfs_stack_path<G: Graph>(graph: &G, start_node: NodeId) -> Vec<Option<NodeId>> {
     let mut stack = vec![start_node];
-    let mut visited_tracker = graph.vistied_tracker();
+    let mut visited_tracker = graph.visited_tracker();
 
     while let Some(node_id) = stack.pop() {
         if !visited_tracker.has_seen(node_id) {
