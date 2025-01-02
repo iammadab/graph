@@ -1,7 +1,7 @@
 //! Represents a graph whose nodes and edges are known before hand
 use std::collections::BTreeMap;
 
-use crate::graph::{Edge, Graph, GraphType, Node, NodeId, NodeTrackState, Weight};
+use crate::graph::{Graph, GraphType, Node, NodeId, NodeTrackState, Weight};
 
 use super::VisitedTracker;
 
