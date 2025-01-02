@@ -25,10 +25,17 @@ pub(crate) fn bfs<G: Graph>(graph: &G, start_node: usize) -> PrevNodeGraphPath {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::graph::static_graph::tests::ten_node_undirected_graph;
+    use crate::graph::{
+        graph_path::prev_node_graph_path_to_isize_vec,
+        static_graph::tests::ten_node_undirected_graph,
+    };
 
     #[test]
     fn test_bfs() {
         let graph = ten_node_undirected_graph();
+        assert_eq!(
+            prev_node_graph_path_to_isize_vec(&bfs(&graph, 0)),
+            vec![-1, 0, 1, 2, 2, 0, 5, 0, 5, 8]
+        );
     }
 }
