@@ -1,7 +1,9 @@
 //! Represents a graph whose nodes and edges are known before hand
-use crate::graph::{Edge, Graph, GraphType, Node, NodeId, Weight};
+use crate::graph::{Edge, Graph, GraphType, Node, NodeId, NodeTrackState, Weight};
 
-struct StaticNode {
+use super::VisitedTracker;
+
+pub(crate) struct StaticNode {
     index: usize,
     edges: Vec<Edge>,
 }
@@ -25,13 +27,14 @@ impl StaticNode {
     }
 }
 
-struct StaticGraph {
+pub(crate) struct StaticGraph {
     nodes: Vec<StaticNode>,
     graph_type: GraphType,
 }
 
 impl Graph for StaticGraph {
     type NodeType = StaticNode;
+    type Trakcer = StaticTracker;
 
     fn node(&self, node_id: usize) -> Option<&Self::NodeType> {
         self.nodes.get(node_id)
@@ -43,6 +46,10 @@ impl Graph for StaticGraph {
 
     fn graph_type(&self) -> &GraphType {
         &self.graph_type
+    }
+
+    fn visited_tracker(&self) -> Self::Trakcer {
+        Self::Trakcer::new(self.nodes.len())
     }
 }
 
@@ -62,8 +69,38 @@ impl StaticGraph {
     }
 }
 
+pub(crate) struct StaticTracker {
+    state: Vec<NodeTrackState>,
+}
+
+impl StaticTracker {
+    fn new(node_count: usize) -> Self {
+        Self {
+            state: vec![NodeTrackState(false, None); node_count],
+        }
+    }
+}
+
+impl VisitedTracker for StaticTracker {
+    fn has_seen(&self, node_id: NodeId) -> bool {
+        self.state[node_id].0
+    }
+
+    fn set_seen(&mut self, node_id: NodeId) {
+        self.state[node_id].0 = true;
+    }
+
+    fn set_prev(&mut self, node_id: NodeId, prev_node_id: NodeId) {
+        self.state[node_id].1 = Some(prev_node_id);
+    }
+
+    fn prev_node_list(&self) -> Vec<Option<NodeId>> {
+        self.state.iter().map(|v| v.1).collect()
+    }
+}
+
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
 
     pub(crate) fn undirected_graph() -> StaticGraph {
