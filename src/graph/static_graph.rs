@@ -3,7 +3,7 @@ use crate::graph::{Edge, Graph, GraphType, Node, NodeId, NodeTrackState, Weight}
 
 use super::VisitedTracker;
 
-struct StaticNode {
+pub(crate) struct StaticNode {
     index: usize,
     edges: Vec<Edge>,
 }
@@ -27,7 +27,7 @@ impl StaticNode {
     }
 }
 
-struct StaticGraph {
+pub(crate) struct StaticGraph {
     nodes: Vec<StaticNode>,
     graph_type: GraphType,
 }
@@ -69,7 +69,7 @@ impl StaticGraph {
     }
 }
 
-struct StaticTracker {
+pub(crate) struct StaticTracker {
     state: Vec<NodeTrackState>,
 }
 
@@ -100,7 +100,7 @@ impl VisitedTracker for StaticTracker {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
 
     pub(crate) fn undirected_graph() -> StaticGraph {
