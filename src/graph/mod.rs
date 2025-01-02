@@ -1,3 +1,6 @@
+use graph_path::PrevNodeGraphPath;
+
+pub(crate) mod graph_path;
 pub(crate) mod static_graph;
 
 pub(crate) type NodeId = usize;
@@ -54,5 +57,5 @@ pub(crate) trait VisitedTracker {
     fn set_prev(&mut self, node_id: NodeId, prev_node_id: NodeId);
 
     /// Converts the tracker state to the prev_node_list path representation
-    fn prev_node_list(&self) -> Vec<Option<NodeId>>;
+    fn prev_node_list(&self) -> PrevNodeGraphPath;
 }
