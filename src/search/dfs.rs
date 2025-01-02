@@ -20,3 +20,21 @@ pub(crate) fn dfs<G: Graph>(graph: &G, start_node: NodeId) -> PrevNodeGraphPath 
 
     visited_tracker.prev_node_list()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::graph::{
+        graph_path::prev_node_graph_path_to_isize_vec,
+        static_graph::tests::ten_node_undirected_graph,
+    };
+
+    #[test]
+    fn test_dfs() {
+        let graph = ten_node_undirected_graph();
+        assert_eq!(
+            prev_node_graph_path_to_isize_vec(&dfs(&graph, 0)),
+            vec![-1, 2, 4, 2, 9, 2, 5, 0, 7, 8],
+        );
+    }
+}
