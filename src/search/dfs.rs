@@ -1,6 +1,6 @@
-use crate::graph::{Graph, Node, NodeId, VisitedTracker};
+use crate::graph::{graph_path::PrevNodeGraphPath, Graph, Node, NodeId, VisitedTracker};
 
-pub(crate) fn dfs_stack_path<G: Graph>(graph: &G, start_node: NodeId) -> Vec<Option<NodeId>> {
+pub(crate) fn dfs_stack_path<G: Graph>(graph: &G, start_node: NodeId) -> PrevNodeGraphPath {
     let mut stack = vec![start_node];
     let mut visited_tracker = graph.visited_tracker();
 
