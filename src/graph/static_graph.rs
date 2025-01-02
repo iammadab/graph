@@ -33,12 +33,16 @@ struct StaticGraph {
 impl Graph for StaticGraph {
     type NodeType = StaticNode;
 
-    fn get_node(&self, node_id: usize) -> Option<&Self::NodeType> {
+    fn node(&self, node_id: usize) -> Option<&Self::NodeType> {
         self.nodes.get(node_id)
     }
 
     fn num_of_nodes(&self) -> Option<usize> {
         Some(self.nodes.len())
+    }
+
+    fn graph_type(&self) -> &GraphType {
+        &self.graph_type
     }
 }
 

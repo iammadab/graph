@@ -13,8 +13,9 @@ pub(crate) enum GraphType {
 pub(crate) trait Graph {
     type NodeType: Node;
 
-    fn get_node(&self, node_id: usize) -> Option<&Self::NodeType>;
+    fn node(&self, node_id: usize) -> Option<&Self::NodeType>;
     fn num_of_nodes(&self) -> Option<usize>;
+    fn graph_type(&self) -> &GraphType;
 }
 
 pub(crate) trait Node {
