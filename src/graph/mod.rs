@@ -1,7 +1,7 @@
 pub(crate) mod static_graph;
 
 pub(crate) type NodeId = usize;
-pub(crate) type Weight = usize;
+pub(crate) type Weight = f64;
 pub(crate) type Edge = (NodeId, Weight);
 
 #[derive(PartialEq)]

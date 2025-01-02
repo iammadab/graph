@@ -61,3 +61,82 @@ impl StaticGraph {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    pub(crate) fn undirected_graph() -> StaticGraph {
+        let mut g = StaticGraph::new(6, GraphType::Undirected);
+        g.insert_edge(0, 1, 1.0);
+        g.insert_edge(0, 3, 1.0);
+        g.insert_edge(0, 4, 1.0);
+        g.insert_edge(1, 4, 1.0);
+        g.insert_edge(1, 2, 1.0);
+        g.insert_edge(2, 4, 1.0);
+        g.insert_edge(2, 5, 1.0);
+        g.insert_edge(4, 5, 1.0);
+        g
+    }
+
+    pub(crate) fn directed_graph() -> StaticGraph {
+        let mut g = StaticGraph::new(6, GraphType::Directed);
+        g.insert_edge(0, 1, 1.0);
+        g.insert_edge(0, 3, 1.0);
+        g.insert_edge(1, 2, 1.0);
+        g.insert_edge(1, 4, 1.0);
+        g.insert_edge(4, 0, 1.0);
+        g.insert_edge(4, 2, 1.0);
+        g.insert_edge(2, 5, 1.0);
+        g.insert_edge(2, 2, 1.0);
+        g.insert_edge(5, 2, 1.0);
+        g.insert_edge(5, 4, 1.0);
+        g
+    }
+
+    pub(crate) fn weighted_directed_graph() -> StaticGraph {
+        let mut g = StaticGraph::new(6, GraphType::Directed);
+        g.insert_edge(0, 1, 5.0);
+        g.insert_edge(0, 3, 1.0);
+        g.insert_edge(0, 4, 2.5);
+        g.insert_edge(1, 0, 4.0);
+        g.insert_edge(1, 2, 1.0);
+        g.insert_edge(2, 1, 3.0);
+        g.insert_edge(3, 4, 3.0);
+        g.insert_edge(4, 1, 1.0);
+        g.insert_edge(4, 2, 5.0);
+        g.insert_edge(4, 3, 1.0);
+        g.insert_edge(4, 5, 2.0);
+        g.insert_edge(5, 2, 1.0);
+        g.insert_edge(5, 4, 1.0);
+        g
+    }
+
+    pub(crate) fn ten_node_undirected_graph() -> StaticGraph {
+        let mut g = StaticGraph::new(10, GraphType::Undirected);
+        g.insert_edge(0, 1, 0.0);
+        g.insert_edge(0, 5, 0.0);
+        g.insert_edge(0, 7, 0.0);
+        g.insert_edge(1, 2, 0.0);
+        g.insert_edge(2, 3, 0.0);
+        g.insert_edge(2, 5, 0.0);
+        g.insert_edge(2, 4, 0.0);
+        g.insert_edge(4, 9, 0.0);
+        g.insert_edge(5, 6, 0.0);
+        g.insert_edge(5, 8, 0.0);
+        g.insert_edge(6, 8, 0.0);
+        g.insert_edge(7, 8, 0.0);
+        g.insert_edge(8, 9, 0.0);
+        g
+    }
+
+    pub(crate) fn disconnected_undirected_graph() -> StaticGraph {
+        let mut g = StaticGraph::new(8, GraphType::Undirected);
+        g.insert_edge(0, 1, 0.0);
+        g.insert_edge(0, 4, 0.0);
+        g.insert_edge(1, 2, 0.0);
+        g.insert_edge(3, 7, 0.0);
+        g.insert_edge(5, 6, 0.0);
+        g
+    }
+}
