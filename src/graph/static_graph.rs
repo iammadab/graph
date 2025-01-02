@@ -1,3 +1,5 @@
+//! Represents a graph whose nodes and edges are known before hand
+
 use crate::graph::{Graph, Node};
 
 struct StaticNode {
