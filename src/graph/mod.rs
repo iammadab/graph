@@ -44,17 +44,3 @@ pub(crate) trait Node {
 /// (seen, previous_node)
 #[derive(Clone)]
 pub(crate) struct NodeTrackState(bool, Option<NodeId>);
-
-pub(crate) trait VisitedTracker {
-    /// Use the tracker to determine if a node has been seen
-    fn has_seen(&self, node_id: NodeId) -> bool;
-
-    /// Set the seen status of a particular node to true
-    fn set_seen(&mut self, node_id: NodeId);
-
-    /// Set the previous_node for a given node to some node_id
-    fn set_prev(&mut self, node_id: NodeId, prev_node_id: NodeId);
-
-    /// Converts the tracker state to the prev_node_list path representation
-    fn prev_node_list(&self) -> PrevNodeGraphPath;
-}

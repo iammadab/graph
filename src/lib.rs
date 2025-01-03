@@ -8,6 +8,7 @@ use std::{
 mod applications;
 mod graph;
 mod search;
+mod tracker;
 
 mod bfs;
 mod clustering;
