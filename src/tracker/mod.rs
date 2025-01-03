@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::graph::{graph_path::PrevNodeGraphPath, NodeId};
 
 pub(crate) trait VisitedTracker<T> {
@@ -51,10 +53,14 @@ impl VisitedTracker<NodeId> for StaticTracker {
 
 pub(crate) struct DynamicTracker<T> {
     state: Vec<NodeTrackState<T>>,
+    label_to_id_map: HashMap<T, NodeId>,
 }
 
 impl<T> DynamicTracker<T> {
     pub(crate) fn new(initial_state: T) -> Self {
-        Self { state: vec![] }
+        Self {
+            state: vec![],
+            label_to_id_map: HashMap::new(),
+        }
     }
 }
