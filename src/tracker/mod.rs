@@ -107,6 +107,6 @@ impl<T: Eq + Hash + Clone> VisitedTracker<T> for DynamicTracker<T> {
     }
 
     fn prev_node_list(&self) -> PrevNodeGraphPath {
-        todo!()
+        self.state.iter().map(|v| v.1).collect()
     }
 }
