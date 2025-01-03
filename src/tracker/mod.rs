@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, hash::Hash};
 
 use crate::graph::{graph_path::PrevNodeGraphPath, NodeId};
 
@@ -65,9 +65,9 @@ impl<T> DynamicTracker<T> {
     }
 }
 
-impl<T> VisitedTracker<T> for DynamicTracker<T> {
+impl<T: Eq + Hash> VisitedTracker<T> for DynamicTracker<T> {
     fn has_seen(&self, node_label: &T) -> bool {
-        todo!()
+        self.label_to_id_map.contains_key(node_label)
     }
 
     fn set_seen(&mut self, node_label: &T) {
