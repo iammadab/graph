@@ -1,7 +1,12 @@
+use std::collections::HashMap;
+
 use crate::graph::{graph_path::PrevNodeGraphPath, Graph, Node, NodeId};
 use crate::tracker::VisitedTracker;
 
-pub(crate) fn dfs<T: Clone, G: Graph<T>>(graph: &G, start_node: T) -> PrevNodeGraphPath {
+pub(crate) fn dfs<T: Clone, G: Graph<T>>(
+    graph: &G,
+    start_node: T,
+) -> (PrevNodeGraphPath, Option<HashMap<T, NodeId>>) {
     let mut stack = vec![start_node];
     let mut visited_tracker = graph.visited_tracker();
 
@@ -18,7 +23,10 @@ pub(crate) fn dfs<T: Clone, G: Graph<T>>(graph: &G, start_node: T) -> PrevNodeGr
         }
     }
 
-    visited_tracker.prev_node_list()
+    (
+        visited_tracker.prev_node_list(),
+        visited_tracker.label_to_id_map(),
+    )
 }
 
 #[cfg(test)]
@@ -33,7 +41,7 @@ mod tests {
     fn test_dfs() {
         let graph = ten_node_undirected_graph();
         assert_eq!(
-            prev_node_graph_path_to_isize_vec(&dfs(&graph, 0)),
+            prev_node_graph_path_to_isize_vec(&dfs(&graph, 0).0),
             vec![-1, 2, 4, 2, 9, 2, 5, 0, 7, 8],
         );
     }
