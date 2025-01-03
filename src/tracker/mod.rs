@@ -19,10 +19,10 @@ pub(crate) trait VisitedTracker<T> {
 /// Holds search information about a given node
 /// (seen, previous_node)
 #[derive(Clone)]
-pub(crate) struct NodeTrackState<T>(bool, Option<T>);
+pub(crate) struct NodeTrackState(bool, Option<NodeId>);
 
 pub(crate) struct StaticTracker {
-    state: Vec<NodeTrackState<NodeId>>,
+    state: Vec<NodeTrackState>,
 }
 
 impl StaticTracker {
@@ -52,7 +52,7 @@ impl VisitedTracker<NodeId> for StaticTracker {
 }
 
 pub(crate) struct DynamicTracker<T> {
-    state: Vec<NodeTrackState<T>>,
+    state: Vec<NodeTrackState>,
     label_to_id_map: HashMap<T, NodeId>,
 }
 
@@ -70,9 +70,21 @@ impl<T: Eq + Hash + Clone> DynamicTracker<T> {
         self.state.push(NodeTrackState(false, None));
         self.state.len() - 1
     }
+
+    fn get_id(&self, node_label: &T) -> NodeId {
+        *self.label_to_id_map.get(node_label).unwrap()
+    }
+
+    fn get_or_allocate_id(&mut self, node_label: &T) -> NodeId {
+        if let Some(node_id) = self.label_to_id_map.get(node_label) {
+            *node_id
+        } else {
+            self.allocate(node_label)
+        }
+    }
 }
 
-impl<T: Eq + Hash> VisitedTracker<T> for DynamicTracker<T> {
+impl<T: Eq + Hash + Clone> VisitedTracker<T> for DynamicTracker<T> {
     fn has_seen(&self, node_label: &T) -> bool {
         // check if we have stored any information about the node
         // in the label to id map, if we have retrieve and return the seen
@@ -85,17 +97,13 @@ impl<T: Eq + Hash> VisitedTracker<T> for DynamicTracker<T> {
     }
 
     fn set_seen(&mut self, node_label: &T) {
-        // this can come before set_prev and set_prev can also come before
-        // first we should try to get the node id
-        // if we can then we should set the appropriate parameter
-        // if we cannot then we need to allocate space for that node and return
-        // the corresponding node id
-        // then continue as previously
-        todo!()
+        let node_id = self.get_or_allocate_id(node_label);
+        self.state[node_id].0 = true;
     }
 
     fn set_prev(&mut self, node_label: &T, prev_node_label: &T) {
-        todo!()
+        let node_id = self.get_or_allocate_id(node_label);
+        self.state[node_id].1 = Some(self.get_id(prev_node_label));
     }
 
     fn prev_node_list(&self) -> PrevNodeGraphPath {
