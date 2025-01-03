@@ -1,9 +1,13 @@
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 
+use crate::graph::NodeId;
 use crate::graph::{graph_path::PrevNodeGraphPath, Graph, Node};
 use crate::tracker::VisitedTracker;
 
-pub(crate) fn bfs<T: Clone, G: Graph<T>>(graph: &G, start_node: T) -> PrevNodeGraphPath {
+pub(crate) fn bfs<T: Clone, G: Graph<T>>(
+    graph: &G,
+    start_node: T,
+) -> (PrevNodeGraphPath, Option<HashMap<T, NodeId>>) {
     let mut visited_tracker = graph.visited_tracker();
 
     // init queue and set start_node to seen
@@ -20,7 +24,10 @@ pub(crate) fn bfs<T: Clone, G: Graph<T>>(graph: &G, start_node: T) -> PrevNodeGr
         }
     }
 
-    visited_tracker.prev_node_list()
+    (
+        visited_tracker.prev_node_list(),
+        visited_tracker.label_to_id_map(),
+    )
 }
 
 #[cfg(test)]
@@ -35,7 +42,7 @@ mod tests {
     fn test_bfs() {
         let graph = ten_node_undirected_graph();
         assert_eq!(
-            prev_node_graph_path_to_isize_vec(&bfs(&graph, 0)),
+            prev_node_graph_path_to_isize_vec(&bfs(&graph, 0).0),
             vec![-1, 0, 1, 2, 2, 0, 5, 0, 5, 8]
         );
     }
