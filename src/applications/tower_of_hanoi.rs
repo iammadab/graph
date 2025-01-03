@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use crate::graph::Node;
+
 type Move = (u8, u8);
 
 pub(crate) struct HanoiState {
@@ -7,9 +9,9 @@ pub(crate) struct HanoiState {
 }
 
 impl HanoiState {
-    fn make_move(&mut self, from: u8, to: u8) {
-        self.is_valid((from, to));
-        self.make_move_unsafe((from, to));
+    fn make_move(&mut self, maybe_move: Move) {
+        self.is_valid(maybe_move);
+        self.make_move_unsafe(maybe_move);
     }
 
     fn make_move_unsafe(&mut self, to_make: Move) {
@@ -52,6 +54,12 @@ impl Display for HanoiState {
     }
 }
 
+//impl Node for HanoiState {
+//    fn neighbors(&self) -> impl Iterator<Item = &crate::graph::NodeId> {
+//        todo!()
+//    }
+//}
+
 #[cfg(test)]
 mod test {
     use super::HanoiState;
@@ -63,5 +71,21 @@ mod test {
             rods: [vec![3, 2, 1], vec![], vec![]],
         };
         assert_eq!(a.to_string(), "_321__");
+    }
+
+    #[test]
+    fn test_move_making() {
+        let mut state = HanoiState {
+            rods: [vec![3, 2, 1], vec![], vec![]],
+        };
+
+        // cannot move from an empty rod
+        assert!(!state.is_valid((1, 2)));
+
+        state.make_move((0, 1));
+        assert_eq!(state.to_string(), "_32_1_");
+
+        // cannot move a bigger disc onto a smaller one
+        assert!(!state.is_valid((0, 1)));
     }
 }
