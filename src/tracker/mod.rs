@@ -56,12 +56,19 @@ pub(crate) struct DynamicTracker<T> {
     label_to_id_map: HashMap<T, NodeId>,
 }
 
-impl<T> DynamicTracker<T> {
+impl<T: Eq + Hash + Clone> DynamicTracker<T> {
     pub(crate) fn new(initial_state: T) -> Self {
         Self {
             state: vec![],
             label_to_id_map: HashMap::new(),
         }
+    }
+
+    fn allocate(&mut self, node_label: &T) -> NodeId {
+        self.label_to_id_map
+            .insert(node_label.clone(), self.state.len());
+        self.state.push(NodeTrackState(false, None));
+        self.state.len() - 1
     }
 }
 
@@ -79,6 +86,11 @@ impl<T: Eq + Hash> VisitedTracker<T> for DynamicTracker<T> {
 
     fn set_seen(&mut self, node_label: &T) {
         // this can come before set_prev and set_prev can also come before
+        // first we should try to get the node id
+        // if we can then we should set the appropriate parameter
+        // if we cannot then we need to allocate space for that node and return
+        // the corresponding node id
+        // then continue as previously
         todo!()
     }
 
