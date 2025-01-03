@@ -1,16 +1,15 @@
 //! Represents a graph whose nodes and edges are known before hand
+use crate::tracker::StaticTracker;
 use std::collections::BTreeMap;
 
-use crate::graph::{Graph, GraphType, Node, NodeId, NodeTrackState, Weight};
-
-use super::VisitedTracker;
+use crate::graph::{Graph, GraphType, Node, NodeId, Weight};
 
 pub(crate) struct StaticNode {
     index: usize,
     edges: BTreeMap<NodeId, Weight>,
 }
 
-impl Node for StaticNode {
+impl Node<NodeId> for StaticNode {
     fn neighbors(&self) -> impl Iterator<Item = &NodeId> {
         self.edges.keys()
     }
@@ -34,12 +33,12 @@ pub(crate) struct StaticGraph {
     graph_type: GraphType,
 }
 
-impl Graph for StaticGraph {
+impl Graph<NodeId> for StaticGraph {
     type NodeType = StaticNode;
     type Trakcer = StaticTracker;
 
-    fn node(&self, node_id: usize) -> Option<&Self::NodeType> {
-        self.nodes.get(node_id)
+    fn node(&self, node_id: &NodeId) -> Option<&Self::NodeType> {
+        self.nodes.get(*node_id)
     }
 
     fn num_of_nodes(&self) -> Option<usize> {
@@ -68,36 +67,6 @@ impl StaticGraph {
         if self.graph_type == GraphType::Undirected {
             self.nodes[to].add_edge(from, weight);
         }
-    }
-}
-
-pub(crate) struct StaticTracker {
-    state: Vec<NodeTrackState>,
-}
-
-impl StaticTracker {
-    fn new(node_count: usize) -> Self {
-        Self {
-            state: vec![NodeTrackState(false, None); node_count],
-        }
-    }
-}
-
-impl VisitedTracker for StaticTracker {
-    fn has_seen(&self, node_id: NodeId) -> bool {
-        self.state[node_id].0
-    }
-
-    fn set_seen(&mut self, node_id: NodeId) {
-        self.state[node_id].0 = true;
-    }
-
-    fn set_prev(&mut self, node_id: NodeId, prev_node_id: NodeId) {
-        self.state[node_id].1 = Some(prev_node_id);
-    }
-
-    fn prev_node_list(&self) -> Vec<Option<NodeId>> {
-        self.state.iter().map(|v| v.1).collect()
     }
 }
 
