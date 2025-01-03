@@ -1,3 +1,4 @@
+use crate::tracker::VisitedTracker;
 use graph_path::PrevNodeGraphPath;
 
 pub(crate) mod graph_path;
@@ -12,12 +13,12 @@ pub(crate) enum GraphType {
     Undirected,
 }
 
-pub(crate) trait Graph {
-    type NodeType: Node;
-    type Trakcer: VisitedTracker;
+pub(crate) trait Graph<T> {
+    type NodeType: Node<T>;
+    type Trakcer: VisitedTracker<T>;
 
     /// Given a node id, return a reference to the concrete node
-    fn node(&self, node_id: usize) -> Option<&Self::NodeType>;
+    fn node(&self, node_id: &T) -> Option<&Self::NodeType>;
 
     /// Optionally returns the total number of nodes in the graph
     /// for static graph that know the exact count for nodes this
@@ -35,26 +36,7 @@ pub(crate) trait Graph {
     fn visited_tracker(&self) -> Self::Trakcer;
 }
 
-pub(crate) trait Node {
+pub(crate) trait Node<T> {
     /// Returns the neighbors for a given node
-    fn neighbors(&self) -> impl Iterator<Item = &NodeId>;
-}
-
-/// Holds search information about a given node
-/// (seen, previous_node)
-#[derive(Clone)]
-pub(crate) struct NodeTrackState(bool, Option<NodeId>);
-
-pub(crate) trait VisitedTracker {
-    /// Use the tracker to determine if a node has been seen
-    fn has_seen(&self, node_id: NodeId) -> bool;
-
-    /// Set the seen status of a particular node to true
-    fn set_seen(&mut self, node_id: NodeId);
-
-    /// Set the previous_node for a given node to some node_id
-    fn set_prev(&mut self, node_id: NodeId, prev_node_id: NodeId);
-
-    /// Converts the tracker state to the prev_node_list path representation
-    fn prev_node_list(&self) -> PrevNodeGraphPath;
+    fn neighbors(&self) -> impl Iterator<Item = T>;
 }
