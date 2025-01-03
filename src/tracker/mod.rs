@@ -17,10 +17,10 @@ pub(crate) trait VisitedTracker<T> {
 /// Holds search information about a given node
 /// (seen, previous_node)
 #[derive(Clone)]
-pub(crate) struct NodeTrackState(bool, Option<NodeId>);
+pub(crate) struct NodeTrackState<T>(bool, Option<T>);
 
 pub(crate) struct StaticTracker {
-    state: Vec<NodeTrackState>,
+    state: Vec<NodeTrackState<NodeId>>,
 }
 
 impl StaticTracker {
@@ -48,3 +48,11 @@ impl VisitedTracker<NodeId> for StaticTracker {
         self.state.iter().map(|v| v.1).collect()
     }
 }
+
+//pub(crate) struct DynamicTracker<T> {
+//    state: Vec<NodeTrackState>,
+//}
+//
+//impl DynamicTracker {
+//    pub(crate) fn new(initial_state: )
+//}
