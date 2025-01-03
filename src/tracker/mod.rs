@@ -64,3 +64,21 @@ impl<T> DynamicTracker<T> {
         }
     }
 }
+
+impl<T> VisitedTracker<T> for DynamicTracker<T> {
+    fn has_seen(&self, node_label: &T) -> bool {
+        todo!()
+    }
+
+    fn set_seen(&mut self, node_label: &T) {
+        todo!()
+    }
+
+    fn set_prev(&mut self, node_label: &T, prev_node_label: &T) {
+        todo!()
+    }
+
+    fn prev_node_list(&self) -> PrevNodeGraphPath {
+        todo!()
+    }
+}
