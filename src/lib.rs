@@ -5,6 +5,7 @@ use std::{
     iter::{empty, once},
 };
 
+mod applications;
 mod graph;
 mod search;
 
