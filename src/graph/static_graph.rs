@@ -10,8 +10,8 @@ pub(crate) struct StaticNode {
 }
 
 impl Node<NodeId> for StaticNode {
-    fn neighbors(&self) -> impl Iterator<Item = &NodeId> {
-        self.edges.keys()
+    fn neighbors(&self) -> impl Iterator<Item = NodeId> {
+        self.edges.keys().map(|v| *v)
     }
 }
 

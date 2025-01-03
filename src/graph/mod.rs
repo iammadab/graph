@@ -38,5 +38,5 @@ pub(crate) trait Graph<T> {
 
 pub(crate) trait Node<T> {
     /// Returns the neighbors for a given node
-    fn neighbors(&self) -> impl Iterator<Item = &T>;
+    fn neighbors(&self) -> impl Iterator<Item = T>;
 }

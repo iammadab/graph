@@ -12,10 +12,10 @@ pub(crate) fn bfs<T: Clone, G: Graph<T>>(graph: &G, start_node: T) -> PrevNodeGr
 
     while let Some(node_id) = queue.pop_front() {
         for neighbor in graph.node(&node_id).unwrap().neighbors() {
-            if !visited_tracker.has_seen(neighbor) {
-                visited_tracker.set_seen(neighbor);
-                visited_tracker.set_prev(neighbor, &node_id);
-                queue.push_back(neighbor.clone());
+            if !visited_tracker.has_seen(&neighbor) {
+                visited_tracker.set_seen(&neighbor);
+                visited_tracker.set_prev(&neighbor, &node_id);
+                queue.push_back(neighbor);
             }
         }
     }
