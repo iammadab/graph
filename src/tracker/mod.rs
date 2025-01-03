@@ -67,10 +67,18 @@ impl<T> DynamicTracker<T> {
 
 impl<T: Eq + Hash> VisitedTracker<T> for DynamicTracker<T> {
     fn has_seen(&self, node_label: &T) -> bool {
-        self.label_to_id_map.contains_key(node_label)
+        // check if we have stored any information about the node
+        // in the label to id map, if we have retrieve and return the seen
+        // variable. if we have not stored any information then it hasn't
+        // been seen
+        self.label_to_id_map
+            .get(node_label)
+            .map(|node_id| self.state[*node_id].0)
+            .unwrap_or(false)
     }
 
     fn set_seen(&mut self, node_label: &T) {
+        // this can come before set_prev and set_prev can also come before
         todo!()
     }
 
