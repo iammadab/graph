@@ -65,7 +65,7 @@ pub(crate) struct DynamicTracker<T> {
 }
 
 impl<T: Eq + Hash + Clone> DynamicTracker<T> {
-    pub(crate) fn new(initial_state: T) -> Self {
+    pub(crate) fn new() -> Self {
         Self {
             state: vec![],
             label_to_id_map: HashMap::new(),
@@ -120,5 +120,28 @@ impl<T: Eq + Hash + Clone> VisitedTracker<T> for DynamicTracker<T> {
 
     fn label_to_id_map(self) -> Option<HashMap<T, NodeId>> {
         Some(self.label_to_id_map)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::tracker::VisitedTracker;
+
+    use super::DynamicTracker;
+
+    #[test]
+    fn test_dynamic_tracker() {
+        let mut tracker: DynamicTracker<String> = DynamicTracker::new();
+        assert!(!tracker.has_seen(&"a".to_string()));
+        tracker.set_seen(&"a".to_string());
+        assert!(tracker.has_seen(&"a".to_string()));
+        assert!(!tracker.has_seen(&"b".to_string()));
+        tracker.set_prev(&"b".to_string(), &"a".to_string());
+        assert!(!tracker.has_seen(&"b".to_string()));
+
+        assert_eq!(tracker.prev_node_list(), vec![None, Some(0)]);
+        let id_map = tracker.label_to_id_map().unwrap();
+        assert_eq!(id_map.get("a"), Some(0).as_ref());
+        assert_eq!(id_map.get("b"), Some(1).as_ref());
     }
 }
