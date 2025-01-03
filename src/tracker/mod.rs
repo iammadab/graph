@@ -49,10 +49,12 @@ impl VisitedTracker<NodeId> for StaticTracker {
     }
 }
 
-//pub(crate) struct DynamicTracker<T> {
-//    state: Vec<NodeTrackState>,
-//}
-//
-//impl DynamicTracker {
-//    pub(crate) fn new(initial_state: )
-//}
+pub(crate) struct DynamicTracker<T> {
+    state: Vec<NodeTrackState<T>>,
+}
+
+impl<T> DynamicTracker<T> {
+    pub(crate) fn new(initial_state: T) -> Self {
+        Self { state: vec![] }
+    }
+}
