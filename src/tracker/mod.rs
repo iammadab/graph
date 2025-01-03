@@ -14,6 +14,10 @@ pub(crate) trait VisitedTracker<T> {
 
     /// Converts the tracker state to the prev_node_list path representation
     fn prev_node_list(&self) -> PrevNodeGraphPath;
+
+    /// Some trackers make use of label to id maps, when node label is not
+    /// of type NodeId
+    fn label_to_id_map(self) -> Option<HashMap<T, NodeId>>;
 }
 
 /// Holds search information about a given node
@@ -48,6 +52,10 @@ impl VisitedTracker<NodeId> for StaticTracker {
 
     fn prev_node_list(&self) -> Vec<Option<NodeId>> {
         self.state.iter().map(|v| v.1).collect()
+    }
+
+    fn label_to_id_map(self) -> Option<HashMap<NodeId, NodeId>> {
+        None
     }
 }
 
@@ -108,5 +116,9 @@ impl<T: Eq + Hash + Clone> VisitedTracker<T> for DynamicTracker<T> {
 
     fn prev_node_list(&self) -> PrevNodeGraphPath {
         self.state.iter().map(|v| v.1).collect()
+    }
+
+    fn label_to_id_map(self) -> Option<HashMap<T, NodeId>> {
+        Some(self.label_to_id_map)
     }
 }
